@@ -1,4 +1,4 @@
-from flask import render_template, redirect, flash, abort, request
+from flask import render_template, redirect, flash, request
 from . import app, db
 from .forms import URL_mapForm
 from .models import URL_map
@@ -20,7 +20,7 @@ def index_view():
     if form.validate_on_submit():
         original = form.original_link.data
         custom_id = form.custom_id.data
-        if custom_id == "" or not custom_id is not None:
+        if custom_id == "" or not (custom_id is not None):
             custom_id = get_unique_short_id()
         if URL_map.query.filter_by(short=custom_id).first() is not None:
             flash(f'Имя {form.custom_id.data} уже занято!')
