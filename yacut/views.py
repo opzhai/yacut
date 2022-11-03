@@ -4,6 +4,7 @@ from .forms import URL_mapForm
 from .models import URL_map
 from string import ascii_letters, digits
 import random
+from http import HTTPStatus
 
 
 def get_unique_short_id():
@@ -19,7 +20,7 @@ def index_view():
     if form.validate_on_submit():
         original = form.original_link.data
         custom_id = form.custom_id.data
-        if custom_id == "" or custom_id is None:
+        if custom_id == "" or not custom_id is not None:
             custom_id = get_unique_short_id()
         if URL_map.query.filter_by(short=custom_id).first() is not None:
             flash(f'Имя {form.custom_id.data} уже занято!')
@@ -42,7 +43,5 @@ def index_view():
 
 @app.route('/<string:short_url>', methods=['GET'])
 def redirect_short_view(short_url):
-    url = URL_map.query.filter_by(short=short_url).first()
-    if url is None:
-        abort(404)
-    return redirect(url.original, 302)
+    url = URL_map.query.filter_by(short=short_url).first_or_404()
+    return redirect(url.original, HTTPStatus.FOUND)
