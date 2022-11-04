@@ -9,7 +9,7 @@ from http import HTTPStatus
 
 def get_unique_short_id():
     LETTER = (set(ascii_letters) | set(digits))
-    link = "".join(random.sample(LETTER, 6))
+    link = ''.join(random.sample(LETTER, 6))
     return link
 
 
@@ -20,7 +20,7 @@ def index_view():
     if form.validate_on_submit():
         original = form.original_link.data
         custom_id = form.custom_id.data
-        if custom_id == "" or not (custom_id is not None):
+        if custom_id == '' or custom_id is None:
             custom_id = get_unique_short_id()
         if URL_map.query.filter_by(short=custom_id).first() is not None:
             flash(f'Имя {form.custom_id.data} уже занято!')

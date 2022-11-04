@@ -24,7 +24,7 @@ def create_id():
         raise InvalidAPIUsage('Отсутствует тело запроса')
     if 'url' not in data:
         raise InvalidAPIUsage('"url" является обязательным полем!')
-    if 'custom_id' not in data or data['custom_id'] is None or data['custom_id'] == "":
+    if 'custom_id' not in data or data['custom_id'] is None or data['custom_id'] == '':
         data['custom_id'] = get_unique_short_id()
     elif len(data['custom_id']) > 16 or not link_template.match(data['custom_id']):
         raise InvalidAPIUsage('Указано недопустимое имя для короткой ссылки')
